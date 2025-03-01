@@ -41,6 +41,7 @@ jobs:
         env:
           SPONSORKIT_GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
           SPONSORKIT_GITHUB_LOGIN: ${{ github.repository_owner }}
+          SPONSORKIT_GITHUB_TYPE: organization
           SPONSORKIT_PATREON_TOKEN: ${{ secrets.PATREON_CREATOR_TOKEN }}
 
       - name: Move images
