@@ -1,17 +1,33 @@
+---
 name: Scheduler
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 0 * * *'
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   update-sponsors:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout dist
+        uses: actions/checkout@v4
+        with:
+          ref: dist
+          path: dist
 
       - name: Set node
         uses: actions/setup-node@v4
@@ -23,13 +39,21 @@ jobs:
       - name: Update sponsors
         run: npm run build
         env:
-          SPONSORKIT_GITHUB_TOKEN: ${{ secrets.SPONSORS_TOKEN }}
-          SPONSORKIT_GITHUB_LOGIN: # your GitHub username
+          SPONSORKIT_GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
+          SPONSORKIT_GITHUB_LOGIN: ${{ github.repository_owner }}
+          SPONSORKIT_PATREON_TOKEN: ${{ secrets.PATREON_CREATOR_TOKEN }}
+
+      - name: Move images
+        run: mv -f sponsors.* dist/
 
       - name: Commit
-        uses: EndBug/add-and-commit@v9
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions-js/push@v1.5
         with:
-          message: "chore: update sponsors.svg"
-          add: "sponsors.*"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_BOT_TOKEN }}
+          author_email: ${{ secrets.GH_BOT_EMAIL }}
+          author_name: ${{ secrets.GH_BOT_NAME }}
+          branch: dist
+          directory: dist
+          force: false
+          message: "chore: update sponsors"
