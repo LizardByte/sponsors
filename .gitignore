@@ -1,4 +1,6 @@
+# Ignore JetBrains IDE files
+.idea/
+
 .env
 node_modules
 sponsorkit
-
