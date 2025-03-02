@@ -2,7 +2,7 @@
 
 ## About
 
-This repository was generated from [sponsorkit-starter](https://github.com/antfu/sponsorkit)
+This repository was generated from [sponsorkit-starter](https://github.com/Open-reSource/sponsorkit-starter)
 and uses [SponsorKit](https://github.com/antfu/sponsorkit/) toolkit for automatically generating sponsors images from
 GitHub Sponsors.
 

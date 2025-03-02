@@ -44,8 +44,21 @@ jobs:
           SPONSORKIT_GITHUB_TYPE: organization
           SPONSORKIT_PATREON_TOKEN: ${{ secrets.PATREON_CREATOR_TOKEN }}
 
-      - name: Move images
-        run: mv -f sponsors.* dist/
+      - name: Setup dist
+        run: |
+          # empty dist directory
+          rm -rf dist/sponsors.*
+
+          # move new files
+          mv -f sponsors.* dist/
+
+      - name: Upload artifacts
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sponsors
+          path: dist
+          if-no-files-found: 'error'
 
       - name: Commit
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
