@@ -77,7 +77,7 @@ function createWrappedSponsorSvg(
   const scaledHeight = svgHeight * scale;
 
   return `
-  <a xlink:href="${sponsor.url}" class="sponsorkit-link" target="_blank" id="${sponsor.name.replace(/\s+/g, '')}">
+  <a xlink:href="${sponsor.url}" class="contribkit-link" target="_blank" id="${sponsor.name.replace(/\s+/g, '')}">
     <svg x="${x}" y="${y}" width="${scaledWidth}" height="${scaledHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">
       ${svgContent}
     </svg>
@@ -164,7 +164,7 @@ export default defineConfig({
 
         if (config.filter?.({ monthlyDollars: Infinity } as any, []) !== false) {
           compose.addSpan(20);
-          compose.addText('Special Supporters', 'sponsorkit-tier-title');
+          compose.addText('Special Supporters', 'contribkit-tier-title');
           compose.addSpan(30);
 
           const padding = 20; // Padding between supporters

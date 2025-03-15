@@ -1,10 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "build": "sh build.sh"
+    "build": "bash build.sh"
   },
   "dependencies": {
-    "@lizardbyte/contribkit": "2025.315.185528"
+    "@lizardbyte/contribkit": "2025.316.4339"
   },
   "devDependencies": {
     "@types/node": "^22.13.8"
