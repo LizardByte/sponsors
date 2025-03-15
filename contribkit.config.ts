@@ -1,4 +1,4 @@
-import { BadgePreset, defineConfig, tierPresets } from 'sponsorkit'
+import { BadgePreset, defineConfig, tierPresets } from '@lizardbyte/contribkit'
 
 const specialSupporters = [
   {
