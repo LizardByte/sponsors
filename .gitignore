@@ -1,10 +1,8 @@
 # Ignore JetBrains IDE files
 .idea/
 
-.cache.json
 .env
-node_modules
+node_modules/
 package-lock.json
-sponsorkit
 
-sponsors.*
+dist/

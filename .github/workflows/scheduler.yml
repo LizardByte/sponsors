@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update-sponsors:
+  update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,23 +34,36 @@ jobs:
         with:
           node-version: lts/*
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm install
 
-      - name: Update sponsors
-        run: npm run build
-        env:
-          CONTRIBKIT_GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
-          CONTRIBKIT_GITHUB_LOGIN: ${{ github.repository_owner }}
-          CONTRIBKIT_GITHUB_TYPE: organization
-          CONTRIBKIT_PATREON_TOKEN: ${{ secrets.PATREON_CREATOR_TOKEN }}
+      - name: Setup env
+        run: |
+          # sponsors
+          echo "CONTRIBKIT_GITHUB_TOKEN=${{ secrets.GH_BOT_TOKEN }}" >> ./configs/sponsors/.env
+          echo "CONTRIBKIT_GITHUB_LOGIN=${{ github.repository_owner }}" >> ./configs/sponsors/.env
+          echo "CONTRIBKIT_PATREON_TOKEN=${{ secrets.PATREON_CREATOR_TOKEN }}" >> ./configs/sponsors/.env
+
+          # crowdin contributors
+          echo "CONTRIBKIT_CROWDIN_TOKEN=${{ secrets.CROWDIN_TOKEN }}" >> ./configs/crowdin/.env
+
+          # github contributors
+          echo "CONTRIBKIT_GITHUB_CONTRIBUTORS_TOKEN=${{ secrets.GH_BOT_TOKEN }}" >> ./configs/github/.env
+          echo "CONTRIBKIT_GITHUB_CONTRIBUTORS_LOGIN=${{ github.repository_owner }}" >> ./configs/github/.env
 
       - name: Setup dist
         run: |
           # empty dist directory
-          rm -rf dist/sponsors.*
+          rm -rf dist/*
 
-          # move new files
-          mv -f sponsors.* dist/
+          # setup .gitignore
+          echo ".cache.json" >> dist/.gitignore
+
+      - name: Update
+        run: npm run build
+        env:
+          CONTRIBKIT_CROWDIN_PROJECT_ID: 606145
+          CONTRIBKIT_GITHUB_TYPE: organization
 
       - name: Upload artifacts
         if: github.event_name == 'pull_request'
